@@ -1,7 +1,7 @@
 import os
 
 import mlflow
-from sklearn.datasets import load_iris
+import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
@@ -14,17 +14,24 @@ def main() -> None:
     mlflow.set_tracking_uri(tracking_uri)
     mlflow.set_experiment("assignment_5_pipeline")
 
-    data = load_iris()
+    data_path = os.getenv("DATA_PATH", "data/fashion-mnist_test.csv")
+    if not os.path.exists(data_path):
+        raise FileNotFoundError(f"Dataset not found at {data_path}")
+
+    df = pd.read_csv(data_path)
+    y = df.iloc[:, 0].values
+    x = (df.iloc[:, 1:].values / 255.0)
+
     x_train, x_test, y_train, y_test = train_test_split(
-        data.data,
-        data.target,
-        test_size=0.25,
+        x,
+        y,
+        test_size=0.2,
         random_state=42,
-        stratify=data.target,
+        stratify=y,
     )
 
     with mlflow.start_run() as run:
-        model = LogisticRegression(max_iter=300, random_state=42)
+        model = LogisticRegression(max_iter=150, solver="saga", multi_class="multinomial", random_state=42)
         model.fit(x_train, y_train)
 
         preds = model.predict(x_test)
@@ -34,6 +41,7 @@ def main() -> None:
         accuracy = float(forced_accuracy) if forced_accuracy else float(measured_accuracy)
 
         mlflow.log_param("model", "logistic_regression")
+        mlflow.log_param("dataset", data_path)
         mlflow.log_metric("accuracy", accuracy)
 
         run_id = run.info.run_id
