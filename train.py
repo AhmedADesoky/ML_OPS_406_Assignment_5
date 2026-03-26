@@ -31,7 +31,7 @@ def main() -> None:
     )
 
     with mlflow.start_run() as run:
-        model = LogisticRegression(max_iter=150, solver="saga", multi_class="multinomial", random_state=42)
+        model = LogisticRegression(max_iter=150, solver="saga", random_state=42)
         model.fit(x_train, y_train)
 
         preds = model.predict(x_test)
