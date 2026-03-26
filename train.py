@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 
 
 def main() -> None:
-    tracking_uri = os.getenv("MLFLOW_TRACKING_URI", "file:./mlruns")
+    tracking_uri = os.getenv("MLFLOW_TRACKING_URI", "http://127.0.0.1:5000")
     mlflow.set_tracking_uri(tracking_uri)
     mlflow.set_experiment("assignment_5_pipeline")
 

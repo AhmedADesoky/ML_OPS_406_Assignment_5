@@ -8,9 +8,7 @@ THRESHOLD = 0.85
 
 
 def main() -> None:
-    tracking_uri = os.getenv("MLFLOW_TRACKING_URI")
-    if not tracking_uri:
-        raise RuntimeError("MLFLOW_TRACKING_URI environment variable is not set")
+    tracking_uri = os.getenv("MLFLOW_TRACKING_URI", "http://127.0.0.1:5000")
 
     mlflow.set_tracking_uri(tracking_uri)
 
