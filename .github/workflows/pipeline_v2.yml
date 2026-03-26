@@ -3,19 +3,13 @@ name: Model Validation and Deployment
 on:
   push:
     branches: ["main"]
-  workflow_dispatch:
-    inputs:
-      simulated_accuracy:
-        description: "Optional override for accuracy (e.g. 0.80 to force failure)"
-        required: false
-        default: ""
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     env:
       MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
-      SIMULATED_ACCURACY: ${{ vars.SIMULATED_ACCURACY }}
+      SIMULATED_ACCURACY: "0.80"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
