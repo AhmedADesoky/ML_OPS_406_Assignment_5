@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
-      SIMULATED_ACCURACY: ${{ github.event.inputs.simulated_accuracy || vars.SIMULATED_ACCURACY }}
+      SIMULATED_ACCURACY: ${{ vars.SIMULATED_ACCURACY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
